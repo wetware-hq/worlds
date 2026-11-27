@@ -69,10 +69,15 @@ test("bandercatch refuses malformed manifests with a code and a line", () => {
     [tiny(st("a", "", "catch goal=9 n=8")), "bad_manifest"],
     [tiny(st("a", "", "orbit goal=3 cards=x,y")), "bad_manifest"],
     [tiny(st("a", "", "orbit goal=1 cards=salt_and_pepper,y")), "bad_manifest"],
+
   ];
   for (const [m, code] of cases) {
     assert.throws(() => compile(m), (e: unknown) => e instanceof BandercatchError && e.code === code && e.line > 0, code);
   }
+});
+
+test("bandercatch accepts orbit cards in any case", () => {
+  assert.doesNotThrow(() => compile(tiny(st("a", "", "orbit goal=2 cards=DNA,RNA"))));
 });
 
 test("bits: a real fork is 1 bit, an illusory fork is 0", () => {

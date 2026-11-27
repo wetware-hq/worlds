@@ -172,7 +172,7 @@ function checkGame(game: Game, line: number): void {
   if (game.kind === "catch") pool = Number(p.n ?? 24);
   if (game.kind === "orbit") {
     const cards = (p.cards ?? "").split(",");
-    if (!p.cards || cards.some((c) => !/^[a-z0-9-]+(_[a-z0-9-]+)*$/.test(c))) bad(`cards must be a comma list of words joined by _`);
+    if (!p.cards || cards.some((c) => !/^[A-Za-z0-9-]+(_[A-Za-z0-9-]+)*$/.test(c))) bad(`cards must be a comma list of words joined by _`);
     if (cards.some((c) => c.split("_").includes("and"))) bad(`a card name cannot contain the word "and"`);
     if (new Set(cards).size !== cards.length) bad(`cards must be distinct`);
     pool = cards.length;
