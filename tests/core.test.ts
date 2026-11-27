@@ -102,6 +102,7 @@ test("transpiler: parse inverts transpile on the sample", () => {
   assert.deepEqual(parse(transpile(steps, g).join("\n"), g), steps);
   assert.throws(() => parse("In web, juggle units 1.", g), /not a move/);
   assert.throws(() => parse("At print, take the first way.", g), /not offered/);
+  assert.throws(() => parse("At web, take the frist way.", g), /no frist way/);
 });
 
 test("the Reader's steering replays to the same path and moves", () => {

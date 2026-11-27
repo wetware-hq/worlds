@@ -37,8 +37,6 @@ export function joinList(xs: string[]): string {
 }
 const splitList = (s: string): string[] => s.split(/, | and /).map((x) => x.trim());
 
-const ORD = ["first", "second", "third", "fourth"];
-
 function fmtArg(g: GameState, a: Arg): string {
   return argType(g, "") === "card" ? g.cards[a as number] : String(a);
 }
@@ -95,7 +93,7 @@ export function parse(text: string, graph: StateGraph): Step[] {
       if (!st) throw new SteerError(n, `no state "${m[1]}"`);
       const way = m[2] === "read another life" ? "again" : m[2] === "close the scroll" ? "stop" : m[3];
       if ((way === "again" || way === "stop") !== (st.ways.length === 0)) throw new SteerError(n, `"${m[2]}" is not offered at ${st.id}`);
-      if (ORD.includes(way) && !st.ways.some((w) => w.id === way)) throw new SteerError(n, `${st.id} has no ${way} way`);
+      if (st.ways.length && !st.ways.some((w) => w.id === way)) throw new SteerError(n, `${st.id} has no ${way} way`);
       steps.push({ type: "way", state: st.id, way });
       return;
     }
