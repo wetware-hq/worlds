@@ -9,6 +9,7 @@ export class Stage {
   private view: View;
   private ray = new THREE.Raycaster();
   private down = 0;
+  private tap: { x: number; y: number; move: Move } | null = null;
   private hovering = false;
   private readonly el: HTMLElement;
   private readonly game: () => GameState;
@@ -30,6 +31,7 @@ export class Stage {
     c.addEventListener("pointerdown", this.pointerDown);
     c.addEventListener("pointerup", this.pointerUp);
     c.addEventListener("pointerleave", this.pointerLeave);
+    c.addEventListener("pointercancel", this.pointerLeave);
     c.addEventListener("pointermove", this.pointerMove);
   }
 
@@ -46,18 +48,26 @@ export class Stage {
     const m = this.hit(e);
     if (!m) return;
     if (this.view.hold) this.down = performance.now();
-    else this.onMove(m);
+    else this.tap = { x: e.clientX, y: e.clientY, move: m };
   };
 
-  private pointerUp = (): void => {
-    if (!this.down) return;
+  // A move on a target is taken on release, so a swipe that scrolls the page is not a move.
+  private pointerUp = (e: PointerEvent): void => {
+    const t = this.tap;
+    this.tap = null;
+    if (t && Math.hypot(e.clientX - t.x, e.clientY - t.y) < 10 && this.live()) this.onMove(t.move);
+    if (this.down) this.release();
+  };
+
+  private release(): void {
     const held = this.heldSteps();
     this.down = 0;
     this.onMove({ verb: "train", arg: Math.max(1, held) });
-  };
+  }
 
   private pointerLeave = (): void => {
-    if (this.down) this.pointerUp();
+    this.tap = null;
+    if (this.down) this.release();
   };
 
   private pointerMove = (e: PointerEvent): void => {
