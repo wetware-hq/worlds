@@ -143,7 +143,10 @@ export class Session {
       steer: transpile(this.visitSteps, this.graph),
       manifestSeq: this.manifestSeq,
       totals: { bits: this.bits, choices: this.choices, parts: this.path.length, max: this.graph.max },
-    }), [e.seq, this.hingeSeq, ...mv.map((m) => m.seq)]);
+    }), [
+      e.seq, this.hingeSeq, this.manifestSeq, ...(this.heading && by !== "reader" ? [this.heading.seq] : []),
+      ...mv.flatMap((m) => (m.code ? [m.seq, m.refuseSeq] : [m.seq])),
+    ]);
     if (this.limit(e.seq)) return null;
     this.enter(to.id);
     return null;
