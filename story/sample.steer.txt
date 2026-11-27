@@ -1,0 +1,27 @@
+# A sample run of Proof of Life, written by the transpiler. Replay it with:
+#   npm run bandercatch -- play story/proof-of-life.txt story/sample.steer.txt --chapters
+In media, train the net for 600 and 400 steps.
+At media, take the second way: look at it a little longer.
+In media, train the net for 1000 steps.
+At media, take the first way: write it down as a web.
+In web, fire units 3, 17, 42, 64 and 99.
+At web, take the first way: encipher it as DNA.
+In dna, write the bases A, C, G, T, A, G, C, T, G, A, C and T.
+At dna, take the first way: cut it into oligos.
+In pool, catch oligos 0, 5, 9, 11, 14, 18, 20 and 23.
+At pool, take the first way: vote the reads back into one sequence.
+In cgr, skip the game.
+At cgr, take the second way: read the glyph at k = 3.
+In loop, cite think, hypothesise, act and observe.
+At loop, take the first way: compile a build plan.
+In plan, place parts 1, 2, 3, 4 and 5.
+At plan, take the first way: mint the coin.
+In mint, commit the seal.
+In mint, reveal the salt.
+At mint, take the first way: write its wiki page.
+In page, cite length, root and receipt.
+At page, take the first way: put a claim to the test.
+In research, refute survives loss and complete.
+At research, take the second way: print the claim that survived.
+In print, write the bases G, A, T, C, A, C, A and G.
+At print, close the scroll.
