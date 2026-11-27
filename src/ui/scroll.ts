@@ -170,7 +170,7 @@ export class Scroll {
 
   private key(e: KeyboardEvent): void {
     const p = this.current;
-    if (!p || !this.live(p) || e.target instanceof HTMLTextAreaElement) return;
+    if (!p || !this.live(p) || e.target instanceof HTMLTextAreaElement || e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key.toUpperCase();
     if ((p.game.kind === "helix" || p.game.kind === "chaos") && (BASES as readonly string[]).includes(k)) {
       this.session.act(p.game.verb, k);
