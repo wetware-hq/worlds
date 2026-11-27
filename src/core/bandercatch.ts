@@ -124,6 +124,7 @@ export function compile(manifest: string): StateGraph {
         const sorted: Record<string, string> = {};
         for (const k of Object.keys(params).sort()) sorted[k] = params[k];
         s.game = { kind: kind as GameKind, params: sorted };
+        checkGame(s.game, n);
         return;
       }
       case "text":
@@ -153,6 +154,30 @@ export function compile(manifest: string): StateGraph {
   const g: StateGraph = { worlds: 1, title: head.title!, start: head.start ?? "", max, states };
   validate(g, lineOf);
   return g;
+}
+
+const posInt = (v: string | undefined): boolean => v !== undefined && /^[1-9][0-9]*$/.test(v);
+
+// A game whose goal cannot be reached would lock its ways behind Skip, so refuse it here.
+function checkGame(game: Game, line: number): void {
+  const p = game.params;
+  const bad = (msg: string): never => {
+    throw new BandercatchError("bad_manifest", line, msg);
+  };
+  if (p.goal !== undefined && !posInt(p.goal)) bad(`goal must be a whole number above 0`);
+  if (p.n !== undefined && !posInt(p.n)) bad(`n must be a whole number above 0`);
+  const goal = p.goal === undefined ? ({ lattice: 5, catch: 8, orbit: 3 } as Record<string, number>)[game.kind] : Number(p.goal);
+  let pool: number | undefined;
+  if (game.kind === "lattice") pool = 128;
+  if (game.kind === "catch") pool = Number(p.n ?? 24);
+  if (game.kind === "orbit") {
+    const cards = (p.cards ?? "").split(",");
+    if (!p.cards || cards.some((c) => !/^[a-z0-9-]+(_[a-z0-9-]+)*$/.test(c))) bad(`cards must be a comma list of words joined by _`);
+    if (cards.some((c) => c.split("_").includes("and"))) bad(`a card name cannot contain the word "and"`);
+    if (new Set(cards).size !== cards.length) bad(`cards must be distinct`);
+    pool = cards.length;
+  }
+  if (pool !== undefined && goal !== undefined && goal > pool) bad(`goal ${goal} is more than the ${pool} there are to pick`);
 }
 
 export function validate(g: StateGraph, lineOf = new Map<string, number>()): void {

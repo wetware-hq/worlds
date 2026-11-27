@@ -66,6 +66,9 @@ test("bandercatch refuses malformed manifests with a code and a line", () => {
     [tiny(st("a", "  way second b go\n  way first b go\n") + st("b")), "bad_way"],
     ["worlds 1\ntitle T\nstart z\nmax 4\n" + st("a"), "no_start"],
     ["worlds 2\n", "bad_manifest"],
+    [tiny(st("a", "", "catch goal=9 n=8")), "bad_manifest"],
+    [tiny(st("a", "", "orbit goal=3 cards=x,y")), "bad_manifest"],
+    [tiny(st("a", "", "orbit goal=1 cards=salt_and_pepper,y")), "bad_manifest"],
   ];
   for (const [m, code] of cases) {
     assert.throws(() => compile(m), (e: unknown) => e instanceof BandercatchError && e.code === code && e.line > 0, code);
