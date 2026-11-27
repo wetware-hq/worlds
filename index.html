@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Proof of Life · wetware worlds</title>
+    <link rel="icon" href="data:," />
+  </head>
+  <body>
+    <header class="cover">
+      <p class="kicker">wetware · worlds</p>
+      <h1 id="title">Proof of Life</h1>
+      <p class="sub">A storyline scroll. One chromosome, one page per gamestate, one game per page.</p>
+      <p class="chapter" id="opening"></p>
+      <p class="hint">Scroll down to begin ↓</p>
+    </header>
+    <main id="scroll"></main>
+    <section id="end" hidden></section>
+    <button id="panel-toggle" aria-expanded="false">trace</button>
+    <aside id="panel">
+      <div class="panel-body">
+        <h3>Map</h3>
+        <svg id="map" role="img" aria-label="state graph"></svg>
+        <dl id="totals"></dl>
+        <h3>Steering <small>your moves, transpiled</small></h3>
+        <textarea id="steer" spellcheck="false" aria-label="steering script"></textarea>
+        <p class="row">
+          <button id="replay">Replay this script</button>
+          <button id="sample">Load the sample</button>
+          <button id="take" disabled>Take the controls</button>
+        </p>
+        <p id="steer-msg" class="msg"></p>
+        <h3>Trace</h3>
+        <p class="mono" id="root"></p>
+        <p class="row">
+          <button id="download">Download trace.jsonl</button>
+          <button id="restart">Start again</button>
+        </p>
+        <details>
+          <summary>Manifest <span class="mono" id="graph-root"></span></summary>
+          <pre id="manifest"></pre>
+        </details>
+      </div>
+    </aside>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

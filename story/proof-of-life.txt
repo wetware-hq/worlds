@@ -1,0 +1,122 @@
+# Proof of Life: the storyline of the wetware scroll.
+# Compile with: npm run bandercatch -- check story/proof-of-life.txt
+worlds 1
+title Proof of Life
+start media
+max 16
+
+state media
+  name the image
+  repo web
+  game fit goal=1000
+  text A photograph arrives: the astronaut Eileen Collins, 64 by 64 pixels, from NASA and in the public domain. As pixels it is 12,288 numbers between 0 and 255.
+  text Press and hold the picture. A small network starts learning to draw it: given a position, return a colour. The longer you hold, the more steps it trains; the real fit takes 10,000 steps of Adam.
+  way first web Write it down as a web
+  way second media Look at it a little longer
+end
+
+state web
+  name the web
+  repo web
+  game lattice goal=5
+  text The image is now a web: two hidden layers of 64 sine units, 4,547 numbers, 9,110 bytes. Its SHA-256 is its root, and the root is its name.
+  text It draws the astronaut back at 31.18 dB. It is an approximation, not a copy, and once committed it never changes. Fire a few of its units and watch the sine waves run.
+  way first dna Encipher it as DNA
+  way second media Fit it again from the pixels
+end
+
+state dna
+  name the sequence
+  repo web
+  game helix goal=12
+  text Every two bytes of the web become eleven bases, and no base ever repeats its neighbour, so the sequence has no homopolymers. The sample web becomes 50,105 bases at 50.1% GC.
+  text From here on this sequence is the one primitive: everything below is named by a root of it. Write a few bases yourself; the rules refuse a base that repeats the last one.
+  way first pool Cut it into oligos
+  way second cgr Play the chaos game on it
+end
+
+state pool
+  name the oligo pool
+  repo web
+  game catch goal=8 n=24
+  text The sequence is cut into 2,002 oligos of 117 bases. Each carries its own index and a parity check, and each base sits in up to four of them.
+  text They can come back in any order, from either strand, with some lost. Catch enough of them and a vote rebuilds the sequence; where the reads do not settle a base, it refuses rather than guess.
+  way first cgr Vote the reads back into one sequence
+  way second pool Lose a few more and try again
+end
+
+state cgr
+  name the chaos game
+  repo web
+  game chaos goal=24
+  text A chaos game turns the sequence into a picture. Start in the middle of a square with A, C, G and T at its corners, and for each base jump halfway towards its corner.
+  text The dots that pile up are a view of the sequence, never data: nothing reads a sequence back from them. Click the corners and watch the pattern settle.
+  way first loop Read the glyph at k = 2
+  way second loop Read the glyph at k = 3
+end
+
+state loop
+  name the loop
+  repo web
+  game orbit goal=4 verb=cite cards=think,hypothesise,act,observe
+  text Now think in pictures. A loop views the data as text grids, states a hypothesis as the picture it expects, runs one experiment on the oligo pool and looks at the difference.
+  text The verdict is computed, not written, and the frames are hash-chained, so one 32-byte head names the whole loop. Cite each of its four steps.
+  way first plan Compile a build plan
+  way second mint Mint the coin now
+end
+
+state plan
+  name the build plan
+  repo tesseract
+  game stack goal=5
+  text tesseract compiles the sequence into parts a synthesiser can make: a tree of pieces whose root is the plan's name. Its target is the sequence root, so the plan points at the chromosome without holding a base of it.
+  text Stack the parts in order, one to five.
+  way first mint Mint the coin
+  way second dna Assemble the parts back into the sequence
+end
+
+state mint
+  name the coin
+  repo bases
+  game seal
+  text The chromosome becomes a coin: one token that stores a salted root and a length, never the bases. Minting is commit and reveal: first you seal a commitment, and later you reveal the salt that opens it.
+  text The sequence is fixed once committed. Each print is recorded on chain and moves the coin's print head; its root never changes.
+  way first page Write its wiki page
+  way second print Sell a print
+end
+
+state page
+  name the wiki page
+  repo helix
+  game orbit goal=3 verb=cite cards=length,root,receipt,origin,glyph
+  text The coin gets a page in helix, the agentic wiki, named dna: and its token id. The page holds claims about the chromosome and the roots that back them. It reads the token, never the sequence.
+  text Cite three claims for the page.
+  way first research Put a claim to the test
+  way second agora Bring it to the forum
+end
+
+state research
+  name the research lane
+  repo popper
+  game orbit goal=2 verb=refute cards=stable,survives_loss,survives_noise,complete
+  text popper takes claims from the page and tries to break them. Before each test it says what result would count against the claim, and only what the data fails to refute is kept. Every verdict stays in the trace.
+  text Refute two conjectures. What survives goes back to the page with its trace.
+  way first page Write the refutations onto the page
+  way second print Print the claim that survived
+end
+
+state print
+  name the print
+  repo med3
+  game helix goal=8
+  text An agent buys a print from med3 over HTTP 402. The payment is held in escrow, and captured only when the print is recorded with a receipt; otherwise it is voided.
+  text The receipt is the head of a read-back loop: a check that the bases read back from the print reproduce the sequence. Write the first bases of the print. This is the proof of life.
+end
+
+state agora
+  name the forum
+  repo agora
+  game orbit goal=3 verb=post cards=root,length,glyph,receipt
+  text You bring the chromosome to agora, a society of agents that share one message board. Here, every post you make cites a root.
+  text Nobody there can see the sequence; all of them can check what is said about it. Post three things.
+end
