@@ -1,7 +1,7 @@
 // The three.js views of the minigames. A view only draws a GameState and says which move a click means;
 // the rules (src/core/rules.ts) decide whether the move is taken.
 import * as THREE from "three";
-import { CORNERS, progress, type Arg, type GameState } from "../core/rules.ts";
+import { progress, type Arg, type GameState } from "../core/rules.ts";
 
 export interface Move {
   verb: string;
@@ -19,7 +19,6 @@ export interface View {
 }
 
 export const BASE_COLOR: Record<string, number> = { A: 0x6fd08c, C: 0x5aa9e6, G: 0xf2c14e, T: 0xef6f6c };
-const INK = 0xe8e4d8;
 const DIM = 0x3a4150;
 
 function label(text: string, w = 256, h = 96, color = "#e8e4d8", bg = "rgba(20,24,32,0.92)"): THREE.CanvasTexture {
@@ -285,59 +284,6 @@ function catchView(g0: GameState): View {
   };
 }
 
-function chaosView(): View {
-  const b = base();
-  const S = 4;
-  const at = (x: number, y: number) => new THREE.Vector3((x - 0.5) * S, (y - 0.5) * S, 0);
-  b.scene.add(new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.PlaneGeometry(S, S)), new THREE.LineBasicMaterial({ color: DIM })));
-  const corners = Object.entries(CORNERS).map(([k, [x, y]]) => {
-    const m = new THREE.Mesh(new THREE.CircleGeometry(0.32, 32), new THREE.MeshBasicMaterial({ map: track(b.disposables, label(k, 96, 96, "#11151c", `#${BASE_COLOR[k].toString(16).padStart(6, "0")}`)) }));
-    m.position.copy(at(x, y)).add(new THREE.Vector3((x - 0.5) * 0.8, (y - 0.5) * 0.8, 0.01));
-    m.userData.move = { verb: "jump", arg: k };
-    b.scene.add(m);
-    return m;
-  });
-  const MAX = 512;
-  const pos = new Float32Array(MAX * 3);
-  const col = new Float32Array(MAX * 3);
-  const pg = new THREE.BufferGeometry();
-  pg.setAttribute("position", new THREE.BufferAttribute(pos, 3));
-  pg.setAttribute("color", new THREE.BufferAttribute(col, 3));
-  b.scene.add(new THREE.Points(pg, new THREE.PointsMaterial({ size: 0.09, vertexColors: true })));
-  const lg = new THREE.BufferGeometry().setFromPoints([new THREE.Vector3(), new THREE.Vector3()]);
-  const line = new THREE.Line(lg, new THREE.LineBasicMaterial({ color: INK, transparent: true, opacity: 0.5 }));
-  b.scene.add(line);
-  const cursor = new THREE.Mesh(new THREE.RingGeometry(0.1, 0.14, 24), new THREE.MeshBasicMaterial({ color: INK }));
-  b.scene.add(cursor);
-  let count = -1;
-  return {
-    ...b,
-    targets: corners,
-    update(g, t) {
-      if (g.points.length !== count) {
-        count = g.points.length;
-        const n = Math.min(MAX, count);
-        const c = new THREE.Color();
-        for (let i = 0; i < n; i++) {
-          const v = at(...g.points[i]);
-          pos.set([v.x, v.y, 0], i * 3);
-          c.setHex(i === 0 ? INK : BASE_COLOR[g.bases[i - 1]]);
-          col.set([c.r, c.g, c.b], i * 3);
-        }
-        pg.setDrawRange(0, n);
-        pg.attributes.position.needsUpdate = pg.attributes.color.needsUpdate = true;
-        const a = at(...g.points[Math.max(0, count - 2)]);
-        const z = at(...g.points[count - 1]);
-        lg.setFromPoints([a, z]);
-        cursor.position.copy(z);
-      }
-      cursor.scale.setScalar(1 + Math.sin(t * 4) * 0.15);
-    },
-    flash() {},
-    dispose: () => disposeAll(b.disposables, b.scene),
-  };
-}
-
 function stackView(g0: GameState): View {
   const b = base();
   b.camera.position.set(0, 1.6, 7);
@@ -460,7 +406,6 @@ export function makeView(g: GameState): View {
     case "lattice": return latticeView();
     case "helix": return helixView();
     case "catch": return catchView(g);
-    case "chaos": return chaosView();
     case "stack": return stackView(g);
     case "seal": return sealView();
     case "orbit": return orbitView(g);

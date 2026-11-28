@@ -23,7 +23,6 @@ function phrase(g: GameState, verb: string): Phrase {
     case "lattice": return { one: "fire unit {list}", many: "fire units {list}" };
     case "helix": return { one: "write the base {list}", many: "write the bases {list}" };
     case "catch": return { one: "catch oligo {list}", many: "catch oligos {list}" };
-    case "chaos": return { one: "jump halfway to {list}", many: "jump halfway to {list}" };
     case "stack": return { one: "place part {list}", many: "place parts {list}" };
     case "seal": return verb === "commit"
       ? { one: "commit the seal", many: "commit the seal" }

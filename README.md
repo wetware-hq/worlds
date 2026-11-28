@@ -15,11 +15,11 @@ npm run bandercatch -- play  story/proof-of-life.txt story/sample.steer.txt --ch
 
 ## What you do
 
-Scroll down. Each gamestate you reach becomes a new section below the last one, with a small game in it: train a net on the astronaut picture, fire sine units, write bases, catch oligos, play the chaos game, stack a build plan, seal a coin, cite claims. Finish the game (or skip it) and the section offers its ways on. A game's canvas only exists while its section is on screen.
+Scroll down. Each gamestate you reach becomes a new section below the last one, with a small game in it: train a net on the astronaut picture, fire sine units, write bases, catch oligos, read the web back, stack a build plan, seal a coin, cite claims. Finish the game (or skip it) and the section offers its ways on. A game's canvas only exists while its section is on screen.
 
 The side panel shows the map of the story, your bits and moves, the steering script written from your moves, and the trace root.
 
-The story follows the stack in [`web/docs/organize-stack.md`](https://github.com/wetware-hq/web/blob/main/docs/organize-stack.md): image → web → sequence → oligo pool → chaos game → loop → build plan (tesseract) → coin (bases) → wiki page (helix) → research (popper) or forum (agora) → print (med3).
+The story follows the stack in [`web/docs/organize-stack.md`](https://github.com/wetware-hq/web/blob/main/docs/organize-stack.md): image → web → sequence → oligo pool → read-back → loop → build plan (tesseract) → coin (bases) → wiki page (helix) → research (popper) or forum (agora) → print (med3).
 
 ## How it is built
 
@@ -48,7 +48,7 @@ state dna
   game helix goal=12
   text Every two bytes of the web become eleven bases ...
   way first pool Cut it into oligos
-  way second cgr Play the chaos game on it
+  way second view Decipher it straight back to the web
 end
 ```
 
@@ -65,7 +65,7 @@ end
 These follow tulip's rules ([`tulip/docs/follow-agent-contract.md`](https://github.com/wetware-hq/tulip/blob/main/docs/follow-agent-contract.md)):
 
 - **The Reader chooses; the engine never does.** A gamestate only moves on through a `choice` (the Reader) or a `reflex` (a steering script the Reader handed over). The `heading` event that hands over the script is where its bits are paid. Each reflex costs 0 bits.
-- **Bits count distinct outcomes.** A fork whose ways lead to different places is worth 1 bit. The chaos game's two ways both lead to the loop, so that fork is worth 0 bits, and the narrator says so.
+- **Bits count distinct outcomes.** A fork whose ways lead to different places is worth 1 bit. The read-back's two ways both lead to the loop, so that fork is worth 0 bits, and the narrator says so.
 - **Narration cites the trace.** Every chapter is written from events alone and cites them as `[e<seq>]`. It only cites earlier events.
 - **The trace is append-only and hash-chained.** Each event is `{seq, world, kind, body, cites}`. `root_n = sha256(root_{n-1} ‖ sha256(jcs(event)))`, starting from `sha256("worlds/1")`. Replaying the same steering script gives the same root.
 
@@ -79,7 +79,6 @@ Each game kind has pure rules in `rules.ts` (`init`, `step`, `progress`). A refu
 | `lattice` | `fire` a unit, 0–127 | already fired |
 | `helix` | `write` a base | it repeats the last base |
 | `catch` | `catch` an oligo | already caught |
-| `chaos` | `jump` halfway to a corner | — |
 | `stack` | `place` part k | not the next part |
 | `seal` | `commit`, then `reveal` | reveal before commit |
 | `orbit` | cite a card (the verb is set in the manifest) | already cited |

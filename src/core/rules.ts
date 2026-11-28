@@ -30,27 +30,24 @@ export interface GameState {
   moves: number;
   total: number; // fit: steps trained
   picked: number[]; // lattice/catch/orbit/stack: indices taken, in order
-  bases: string[]; // helix: written bases; chaos: jumped corners
-  points: [number, number][]; // chaos: the dots
+  bases: string[]; // helix: written bases
   committed: boolean; // seal
   revealed: boolean; // seal
 }
 
 export const BASES = ["A", "C", "G", "T"] as const;
-export const CORNERS: Record<string, [number, number]> = { A: [0, 0], C: [0, 1], G: [1, 1], T: [1, 0] };
 
 const MAIN_VERB: Record<GameKind, string> = {
   fit: "train",
   lattice: "fire",
   helix: "write",
   catch: "catch",
-  chaos: "jump",
   stack: "place",
   seal: "commit",
   orbit: "cite",
 };
 const DEFAULT_GOAL: Record<GameKind, number> = {
-  fit: 1000, lattice: 5, helix: 12, catch: 8, chaos: 24, stack: 5, seal: 1, orbit: 3,
+  fit: 1000, lattice: 5, helix: 12, catch: 8, stack: 5, seal: 1, orbit: 3,
 };
 
 export function verbsOf(g: GameState): string[] {
@@ -76,7 +73,6 @@ export function init(game: Game): GameState {
     total: 0,
     picked: [],
     bases: [],
-    points: [[0.5, 0.5]],
     committed: false,
     revealed: false,
   };
@@ -117,14 +113,6 @@ export function step(g: GameState, verb: string, arg?: Arg): RefuseCode | null {
       if (g.bases[g.bases.length - 1] === arg) return "homopolymer";
       g.bases.push(arg);
       break;
-    case "chaos": {
-      if (typeof arg !== "string" || !(arg in CORNERS)) return "bad_arg";
-      const [x, y] = g.points[g.points.length - 1];
-      const [cx, cy] = CORNERS[arg];
-      g.points.push([(x + cx) / 2, (y + cy) / 2]);
-      g.bases.push(arg);
-      break;
-    }
     case "seal":
       if (arg !== undefined) return "bad_arg";
       if (verb === "commit") {
@@ -148,8 +136,6 @@ export function progress(g: GameState): number {
       return Math.min(1, g.total / g.goal);
     case "helix":
       return Math.min(1, g.bases.length / g.goal);
-    case "chaos":
-      return Math.min(1, (g.points.length - 1) / g.goal);
     case "seal":
       return g.revealed ? 1 : g.committed ? 0.5 : 0;
     default:
@@ -159,7 +145,7 @@ export function progress(g: GameState): number {
 
 export function argType(g: GameState, verb: string): "int" | "base" | "card" | "none" {
   if (verb === "skip" || g.kind === "seal") return "none";
-  if (g.kind === "helix" || g.kind === "chaos") return "base";
+  if (g.kind === "helix") return "base";
   if (g.kind === "orbit") return "card";
   return "int";
 }
