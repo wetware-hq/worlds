@@ -10,8 +10,8 @@ In dna, write the bases A, C, G, T, A, G, C, T, G, A, C and T.
 At dna, take the first way: cut it into oligos.
 In pool, catch oligos 0, 5, 9, 11, 14, 18, 20 and 23.
 At pool, take the first way: vote the reads back into one sequence.
-In cgr, skip the game.
-At cgr, take the second way: read the glyph at k = 3.
+In view, skip the game.
+At view, take the second way: read it as an 8 by 8 grid.
 In loop, cite think, hypothesise, act and observe.
 At loop, take the first way: compile a build plan.
 In plan, place parts 1, 2, 3, 4 and 5.

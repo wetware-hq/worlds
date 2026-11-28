@@ -83,7 +83,7 @@ test("bandercatch accepts orbit cards in any case", () => {
 test("bits: a real fork is 1 bit, an illusory fork is 0", () => {
   const s = (id: string) => g.states.find((x) => x.id === id)!;
   assert.equal(hingeBits(s("media")), 1);
-  assert.equal(hingeBits(s("cgr")), 0);
+  assert.equal(hingeBits(s("view")), 0);
   assert.equal(hingeBits(s("print")), 0);
 });
 

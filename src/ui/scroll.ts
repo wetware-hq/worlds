@@ -32,7 +32,6 @@ const HINTS: Record<string, string> = {
   lattice: "Click units to fire them.",
   helix: "Write bases with the buttons or the A, C, G and T keys.",
   catch: "Click the drifting oligos to catch them.",
-  chaos: "Click a corner, or press A, C, G or T, to jump halfway to it.",
   stack: "Click the parts in order, from 1.",
   seal: "Click the coin, or use the buttons: commit first, then reveal.",
   orbit: "Click the cards as they pass.",
@@ -172,7 +171,7 @@ export class Scroll {
     const p = this.current;
     if (!p || !this.live(p) || e.target instanceof HTMLTextAreaElement || e.ctrlKey || e.metaKey || e.altKey) return;
     const k = e.key.toUpperCase();
-    if ((p.game.kind === "helix" || p.game.kind === "chaos") && (BASES as readonly string[]).includes(k)) {
+    if (p.game.kind === "helix" && (BASES as readonly string[]).includes(k)) {
       this.session.act(p.game.verb, k);
     }
   }
@@ -256,7 +255,7 @@ export class Scroll {
       b.onclick = () => this.move(p, { verb, arg });
       p.controls.append(b);
     };
-    if (g.kind === "helix" || g.kind === "chaos") for (const x of BASES) add(x, g.verb, x, `base base-${x}`);
+    if (g.kind === "helix") for (const x of BASES) add(x, g.verb, x, `base base-${x}`);
     if (g.kind === "seal") {
       add("Commit the seal", "commit");
       add("Reveal the salt", "reveal");

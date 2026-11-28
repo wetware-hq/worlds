@@ -32,7 +32,7 @@ state dna
   text Every two bytes of the web become eleven bases, and no base ever repeats its neighbour, so the sequence has no homopolymers. The sample web becomes 50,105 bases at 50.1% GC.
   text From here on this sequence is the one primitive: everything below is named by a root of it. Write a few bases yourself; the rules refuse a base that repeats the last one.
   way first pool Cut it into oligos
-  way second cgr Play the chaos game on it
+  way second view Decipher it straight back to the web
 end
 
 state pool
@@ -41,18 +41,18 @@ state pool
   game catch goal=8 n=24
   text The sequence is cut into 2,002 oligos of 117 bases. Each carries its own index and a parity check, and each base sits in up to four of them.
   text They can come back in any order, from either strand, with some lost. Catch enough of them and a vote rebuilds the sequence; where the reads do not settle a base, it refuses rather than guess.
-  way first cgr Vote the reads back into one sequence
+  way first view Vote the reads back into one sequence
   way second pool Lose a few more and try again
 end
 
-state cgr
-  name the chaos game
+state view
+  name the read-back
   repo web
-  game chaos goal=24
-  text A chaos game turns the sequence into a picture. Start in the middle of a square with A, C, G and T at its corners, and for each base jump halfway towards its corner.
-  text The dots that pile up are a view of the sequence, never data: nothing reads a sequence back from them. Click the corners and watch the pattern settle.
-  way first loop Read the glyph at k = 2
-  way second loop Read the glyph at k = 3
+  game lattice goal=5
+  text The sequence deciphers back to the same 9,110 bytes of the web, and the web draws the astronaut again. A loop pictures that render as a text grid of brightness, one character per cell.
+  text The grid is a view of the data, never data: nothing reads a sequence back from it. Fire a few units of the web you read back and watch them draw.
+  way first loop Read it as a 16 by 16 grid
+  way second loop Read it as an 8 by 8 grid
 end
 
 state loop
@@ -88,7 +88,7 @@ end
 state page
   name the wiki page
   repo helix
-  game orbit goal=3 verb=cite cards=length,root,receipt,origin,glyph
+  game orbit goal=3 verb=cite cards=length,root,receipt,origin,view
   text The coin gets a page in helix, the agentic wiki, named dna: and its token id. The page holds claims about the chromosome and the roots that back them. It reads the token, never the sequence.
   text Cite three claims for the page.
   way first research Put a claim to the test
@@ -116,7 +116,7 @@ end
 state agora
   name the forum
   repo agora
-  game orbit goal=3 verb=post cards=root,length,glyph,receipt
+  game orbit goal=3 verb=post cards=root,length,view,receipt
   text You bring the chromosome to agora, a society of agents that share one message board. Here, every post you make cites a root.
   text Nobody there can see the sequence; all of them can check what is said about it. Post three things.
 end

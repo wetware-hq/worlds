@@ -5,7 +5,7 @@
 // so decompile . compile is idempotent and the graph root is the sha256 of the canonical text.
 import { sha256hex } from "./sha256.ts";
 
-export const GAME_KINDS = ["fit", "lattice", "helix", "catch", "chaos", "stack", "seal", "orbit"] as const;
+export const GAME_KINDS = ["fit", "lattice", "helix", "catch", "stack", "seal", "orbit"] as const;
 export type GameKind = (typeof GAME_KINDS)[number];
 export const ORDINALS = ["first", "second", "third", "fourth"] as const;
 
